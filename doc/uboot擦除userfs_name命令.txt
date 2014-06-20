@@ -1,0 +1,2 @@
+prot off a0780000 a07fffff
+erase a0780000 a07fffff

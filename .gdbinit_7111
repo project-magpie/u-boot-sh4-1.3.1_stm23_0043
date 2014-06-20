@@ -1,0 +1,4 @@
+b stmac_phy_init
+sh4tp 192.168.3.108:sat7111:st40,seuc=1
+load
+c
