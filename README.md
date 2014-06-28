@@ -152,3 +152,18 @@ index b77a8e8..545e8f0 100755
  PLATFORM_CPPFLAGS += -DCONFIG_SH4 -D__SH4__ -DCONFIG_IDENT_STRING=$(SH_IDENT_STRING)
  PLATFORM_LDFLAGS  += -n
 ```
+
+# Compilation with Yocto/OE Toolchain
+
+The u-boot source can be compiled in this way with the yocto toolchain:
+
+```bash
+$ source /opt/poky/1.5.1/environment-setup-sh4-poky-linux
+# For  more details on this please read:
+# http://www.denx.de/wiki/view/ELDK-5/FrequentlyAskedQuestionsAndAnswers#Compiling_U_Boot_or_Linux_fails
+$ unset LDFLAGS
+$ export CROSS_COMPILE=sh4-poky-linux-
+$ make distclean
+$ make mb618se_config
+$ make
+```
