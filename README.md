@@ -95,3 +95,60 @@ Here is a full session log:
     Err:   serial
     IdentID : 09 00 07 00 00 46 d1
     Hit ESC to stop autoboot:  0
+
+# Building under Yocto
+
+Before you can start building with SH4 Toolchain generated for Yocto you may apply this Patch
+
+``` diff
+diff --git a/Makefile b/Makefile
+index c70d0b0..d406e09 100755
+--- a/Makefile
++++ b/Makefile
+@@ -258,7 +258,8 @@ LIBS := $(addprefix $(obj),$(LIBS))
+ .PHONY : $(LIBS)
+
+ # Add GCC lib
+-PLATFORM_LIBS += -L $(shell dirname `$(CC) $(CFLAGS) -print-libgcc-file-name`) -lgcc
++#PLATFORM_LIBS += -L $(shell dirname `$(CC) $(CFLAGS) -print-libgcc-file-name`) -lgcc
++PLATFORM_LIBS += -L /opt/poky/1.5.1/sysroots/sh4-poky-linux/usr/lib/sh4-poky-linux/4.7.2 -lgcc
+
+ # The "tools" are needed early, so put this first
+ # Don't include stuff already done in $(LIBS)
+diff --git a/cpu/sh/config.mk b/cpu/sh/config.mk
+index 5cc8f25..6896faa 100755
+--- a/cpu/sh/config.mk
++++ b/cpu/sh/config.mk
+@@ -21,4 +21,4 @@
+ # MA 02111-1307 USA
+ #
+
+-PLATFORM_CPPFLAGS += -m4 -m4-nofpu -U__sh3__
++PLATFORM_CPPFLAGS += -m4 -U__sh3__
+diff --git a/include/configs/mb618.h b/include/configs/mb618.h
+index cd4399a..ea26760 100755
+--- a/include/configs/mb618.h
++++ b/include/configs/mb618.h
+@@ -363,7 +363,7 @@
+ #define CFG_HZ			(P_CLOCK_RATE/1024) /* HZ for timer ticks	*/
+ #define CFG_LOAD_ADDR		CFG_SDRAM_BASE	/* default load address		*/
+ #define CFG_BOOTMAPSZ		(16 << 20)	/* initial linux memory size	*/
+-#define CONFIG_BOOTDELAY	3//10		/* default delay before executing bootcmd */
++#define CONFIG_BOOTDELAY	10		/* default delay before executing bootcmd */
+ #define CONFIG_ZERO_BOOTDELAY_CHECK
+
+ #define CONFIG_CMDLINE_EDITING
+diff --git a/sh_config.mk b/sh_config.mk
+index b77a8e8..545e8f0 100755
+--- a/sh_config.mk
++++ b/sh_config.mk
+@@ -27,7 +27,7 @@
+ # for actual build number, in the following identifier.
+ # Regular Expression for string is:
+ # 	"stm[2-9][0-9]-[2-9][0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]"
+-SH_IDENT_STRING="\"stm23_0043\""
++SH_IDENT_STRING="\"stm23_0099\""
+
+ PLATFORM_CPPFLAGS += -DCONFIG_SH4 -D__SH4__ -DCONFIG_IDENT_STRING=$(SH_IDENT_STRING)
+ PLATFORM_LDFLAGS  += -n
+```
