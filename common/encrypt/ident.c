@@ -57,7 +57,7 @@ static uchar 	CryptoE2_IdentID[7] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 
 static sint  iCryptoE2ErrorCount = CRYPTOE2_MAX_RETRY_TIMES;
 
-
+void print_boxname ( unsigned char *stb_id );
 void  IDENT_Init( void )
 {
 	sint  	IdentError = 0;
@@ -93,6 +93,7 @@ void  IDENT_Init( void )
 				CryptoE2_IdentID[5],
 				CryptoE2_IdentID[6]
 				));
+			print_boxname ( CryptoE2_IdentID );
 		}
 
 	}
@@ -126,5 +127,77 @@ sint	IDENT_Valid( void )
 }
 
 
-
+void print_boxname ( unsigned char *stb_id )
+{
+    int sys_id = (stb_id[0] << 16) | (stb_id[1] << 8) | stb_id[2] ;
+    char* tmp = NULL;
+    switch (sys_id) {
+    case 0x090003:
+        tmp = "Truman Premier 1+";
+        break;
+    case 0x090007:
+        tmp = "GoldenMedia GM990";
+        break;
+    case 0x090008:
+        tmp = "Edision Pingulux";
+        break;
+    case 0x09000a:
+        tmp = "Amiko Alien SDH8900";
+        break;
+    case 0x09000b:
+        tmp = "GalaxyInnovations S8120";
+        break;
+    case 0x09000d:
+        tmp = "Dynavision Spark";
+        break;
+    case 0x09000e:
+        tmp = "SAB Unix F+ Solo (S902)";
+        break;
+    case 0x090015:
+        tmp = "Superbox S 750 HD";
+        break;
+    case 0x09001d:
+        tmp = "Fulan Spark I+";
+        break;
+    case 0x090020:
+        tmp = "SAMSAT LINUX 1";
+        break;
+    case 0x090021:
+        tmp = "Visionnet Hammer 5400"; // or Startrack SRT 2020 HD, or Visionnet Fireball 101
+        break;
+    case 0x0c0003:
+        tmp = "Truman Top Box 2";
+        break;
+    case 0x0c0007:
+        tmp = "GoldenMedia Triplex";
+        break;
+    case 0x0c000a:
+        tmp = "Amiko Alien 2";
+        break;
+    case 0x0c000b:
+        tmp = "GalaxyInnovations Avatar 3 (8820)";
+        break;
+    case 0x0c000d:
+        tmp = "Dynavision 7162";
+        break;
+    case 0x0c000e:
+        tmp = "SAB Unix Triple HD (S903)";
+        break;
+    case 0x0c001d:
+        tmp = "Satcom 7162";
+        break;
+    case 0x0c0020:
+        tmp = "Samsat 7162";
+        break;
+    case 0x0c0021:
+        tmp = "Visionnet Falcon";
+        break;
+    case 0x0c002b00:
+        tmp = "Icecrypt S3700 CHD";
+        break;
+    default:
+        tmp = "Unkown STB";
+    }
+    IDENT_DEBUG(("STB     : %s \n\r",tmp));
+}
 
