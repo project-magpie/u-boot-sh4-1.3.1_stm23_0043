@@ -164,6 +164,6 @@ $ source /opt/poky/1.5.1/environment-setup-sh4-poky-linux
 $ unset LDFLAGS
 $ export CROSS_COMPILE=sh4-poky-linux-
 $ make distclean
-$ make mb618se_config
+$ make mb618_config
 $ make
 ```
