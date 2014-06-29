@@ -2751,12 +2751,8 @@ mb618se_config :		unconfig
 	@echo "#define CONFIG_SH_SE_MODE   1" >>include/config.h)
 	$(if $(findstring se,$@), \
 	@echo "TEXT_BASE = 0x87F00000" >$(obj)board/mb618/config.tmp)
-ifeq ($(NAND),yes)
 	@echo "#define CONFIG_CMD_NAND" >>include/config.h
-endif
-ifeq ($(YW_E2PROG),yes)
 	@echo "#define YW_CONFIG_ABORT_BY_KEYBOARD" >>include/config.h
-endif
 ifeq ($(YW_BURNER),yes)
 	@echo "#define CONFIG_YW_BURNER" >>include/config.h
 endif
