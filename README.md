@@ -96,6 +96,10 @@ Here is a full session log:
     IdentID : 09 00 07 00 00 46 d1
     Hit ESC to stop autoboot:  0
 
+# Reloading a new image
+
+During development it may will become usefull to load a u-boot and make some test recompile some stuff and reload this new binary. You can interrut your GDB session by pressing **CTRL-C** loading the new image and write continue in the console. This will load the new u-boot into RAM and executes this new image. This is nice during development of new u-boot features.
+
 # Building under Yocto
 
 Before you can start building with SH4 Toolchain generated for Yocto you may apply this Patch
@@ -167,3 +171,71 @@ $ make distclean
 $ make mb618_config
 $ make
 ```
+# 29 Bit vs. 32 Bit Adress Mode
+
+The SH40-300 core used in the Fulan Spark 71xx Receivers provide by default the 29 Bit Adress mode. Within this mode 512MB of Memory can be addressed.
+
+    2^29 = 512 MB
+
+But they also provide the 32 Bit space enhanced mode (SE). To load a u-boot compiled for SE mode you also have to use the GDB SE config flag:
+
+     sh4tp STMCLT1000_A:sat7111:st40,debug=2,se=1
+
+To compile your binary in 32 Bit SE mode you have to run the following command for activating
+
+```bash
+$ source /opt/poky/1.5.1/environment-setup-sh4-poky-linux
+# For  more details on this please read:
+# http://www.denx.de/wiki/view/ELDK-5/FrequentlyAskedQuestionsAndAnswers#Compiling_U_Boot_or_Linux_fails
+$ unset LDFLAGS
+$ export CROSS_COMPILE=sh4-poky-linux-
+$ make distclean
+$ make mb618se_config
+$ make
+```
+
+I hope you have noticed the lower-case **se** at config stage. As a result you can see the output of the loaded u-Boot also tells you that you are using 32 Bit mode.
+
+```
+Board: STx7111-Mboard (MB618)  [32-bit mode]
+info: Disregarding any EPLD
+
+
+U-Boot 1.3.1-gda1a2b22-dirty (Jun 30 2014 - 17:36:41) - stm23_0099 - YW 1.0.023 Rel
+
+DRAM:  128 MiB
+NOR:     8 MiB
+NAND:  512 MiB
+In:    serial
+Out:   serial
+Err:   serial
+IdentID : 09 00 07 00 00 46 d1
+STB     : GoldenMedia GM990
+Hit ESC to stop autoboot:  0
+MB618>
+```
+
+If you are using your version of u-boot only for reflashing your bricket STB with the original one it should make no difference if you are using 29Bit or 32Bit one. But if you want to write it onto flash you should use 32 Bit one.
+
+Because there is a [check](https://github.com/project-magpie/u-boot-sh4-1.3.1_stm23_0043/blob/master/lib_sh/sh_linux.c) wether the Linux Kernel is compiled for 29 Bit or 32Bit.
+
+```C
+
+  /* try and detect if the kernel is incompatible with U-boot */
+  if ((*SE_MODE & 0xFFFFFF00) != 0x53453F00)  /* 'SE?.' */
+  {
+    printf("\nWarning: Unable to determine if kernel is built for 29- or 32-bit mode!\n");
+  }
+  else if ((*SE_MODE & 0xFF) != CURRENT_SE_MODE)
+  {
+    printf("\n"
+      "Error: A %2u-bit Kernel is incompatible with this %2u-bit U-Boot!\n"
+      "Please re-configure and re-build vmlinux or u-boot.\n"
+      "Aborting the Boot process - Boot FAILED.  (SE_MODE=0x%08x)\n",
+      CURRENT_SE_MODE ^ (32 ^ 29),
+      CURRENT_SE_MODE,
+      *SE_MODE);
+    return;
+  }
+  ```
+
