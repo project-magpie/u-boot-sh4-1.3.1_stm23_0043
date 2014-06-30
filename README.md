@@ -15,6 +15,9 @@ After gdb has started and the box is turned on:
     (gdb) load /data/src/u-boot-sh4-1.3.1_stm23_0043/u-boot
     (gdb) continue
 
+**ATTENTION:*** On linux the _STMCLT1000\_A_ is needed instead of the _STMCLT1000A_ on Windows. My primary plattform is linux so
+you will mostly read _STMCLT1000\_A_.
+
 Here is a full session log:
 
     (gdb) sh4tp STMCLT1000_A:sat7111:st40,debug=2
