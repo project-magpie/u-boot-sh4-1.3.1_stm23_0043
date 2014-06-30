@@ -85,19 +85,28 @@ Here is a full session log:
 
 ## On the minicom console
 
-    Board: STx7111-Mboard (MB618)  [29-bit mode]
-    info: Disregarding any EPLD
+Your serial Port have to use the following setting:
+
+- Baudrate    :  115200 Baud
+- Data        :       8 Bit
+- Parity      :    none
+- Flow Control:    none
+
+```
+Board: STx7111-Mboard (MB618)  [29-bit mode]
+info: Disregarding any EPLD
 
 
-    U-Boot 1.3.1-g13a70f75-dirty (Jun 28 2014 - 17:12:16) - stm23_0099 - YW 1.0.023 Rel
+U-Boot 1.3.1-g13a70f75-dirty (Jun 28 2014 - 17:12:16) - stm23_0099 - YW 1.0.023 Rel
 
-    DRAM:  128 MiB
-    NOR:     8 MiB
-    In:    serial
-    Out:   serial
-    Err:   serial
-    IdentID : 09 00 07 00 00 46 d1
-    Hit ESC to stop autoboot:  0
+DRAM:  128 MiB
+NOR:     8 MiB
+In:    serial
+Out:   serial
+Err:   serial
+IdentID : 09 00 07 00 00 46 d1
+Hit ESC to stop autoboot:  0
+```
 
 # Reloading a new image
 
